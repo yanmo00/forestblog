@@ -7,7 +7,7 @@ create table "users"
     email       varchar(64)   not null,
     created_by  bigint        not null,
     updated_by  bigint        not null,
-    created_at  date     not null,
+    created_at  timestamp     not null,
     updated_at  timestamp     not null,
     remark      varchar(255)  ,
     avatar      text
