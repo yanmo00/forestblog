@@ -24,9 +24,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword("123456");
         user.setEmail("1252603486@qq.com");
         user.setAvatar("https://cdn.jsdelivr.net/gh/forestworld/images/avatar.jpg");
-        user.setCreatedAt(LocalDateTime.now());
         user.setCreatedBy(1L);
-        user.setUpdatedAt(LocalDateTime.now());
         user.setUpdatedBy(1L);
         userMapper.insert(user);
 
