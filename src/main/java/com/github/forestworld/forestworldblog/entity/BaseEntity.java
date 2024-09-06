@@ -19,7 +19,6 @@ public class BaseEntity {
      */
     private Long updatedBy;
 
-
     /**
      * 创建时间
      */

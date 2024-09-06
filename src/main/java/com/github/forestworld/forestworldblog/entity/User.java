@@ -10,7 +10,7 @@ import java.util.Date;
 @TableName("users")
 public class User extends BaseEntity {
     /**
-     *
+     *id值
      */
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -29,8 +29,6 @@ public class User extends BaseEntity {
      * 邮箱
      */
     private String email;
-
-
 
     /**
      * 头像
