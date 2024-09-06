@@ -27,8 +27,6 @@ public class GlobalExceptionHandler {
         return ResultBean.error(message);
     }
 
-
-
     /**
      * 请求方式不支持
      */
