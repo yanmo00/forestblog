@@ -1,5 +1,6 @@
 package com.github.forestworld.forestworldblog.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.github.forestworld.forestworldblog.service.UserService;
 import com.github.forestworld.forestworldblog.vo.ResultBean;
@@ -16,6 +17,7 @@ public class UserController {
     @Resource
     private UserService userService;
     @GetMapping("/add")
+    @SaCheckLogin
     public ResultBean<String> addUser() {
         return userService.addUser();
     }
