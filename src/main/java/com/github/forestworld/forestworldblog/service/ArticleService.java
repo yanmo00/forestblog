@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ArticleService {
     // Service接口写出整体方法，Impl具体实施通过继承重写
-    ResultBean<Article> getArticle(String articleId);
+    List<Article> searchByContent(String content);
 
     ResultBean<List<Article>> getArticles();
 

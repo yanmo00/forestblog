@@ -2,10 +2,12 @@ package com.github.forestworld.forestworldblog.service.impl;
 
 import com.github.forestworld.forestworldblog.dao.ArticleMapper;
 import com.github.forestworld.forestworldblog.entity.Article;
+import com.github.forestworld.forestworldblog.repository.ArticleRepository;
 import com.github.forestworld.forestworldblog.service.ArticleService;
 import com.github.forestworld.forestworldblog.vo.ResultBean;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +18,17 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private ArticleMapper articleMapper;
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
-    public ResultBean<Article> getArticle(String articleId) {
-        return null;
+    public List<Article> searchByContent(String content) {
+        return articleRepository.findByContentContaining(content);
     }
 
     @Override
     public ResultBean<List<Article>> getArticles() {
-        return null;
+        return ResultBean.success();
     }
 
     @Override
