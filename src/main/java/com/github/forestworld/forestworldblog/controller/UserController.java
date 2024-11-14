@@ -14,8 +14,10 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
     @GetMapping("/add")
     public ResultBean<String> addUser() {
         return userService.addUser();
     }
+
 }

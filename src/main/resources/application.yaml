@@ -2,9 +2,29 @@ spring.application.name:
   forestworld-blog
 server:
   port: 7002
+
+logging:
+  level:
+    root: info
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://101.200.158.94:9740/forestblog
+    url: jdbc:postgresql://101.200.158.94:9740/forestblog?characterEncoding=UTF-8
     username: beiyouge
     password: AaZz123456
+    # application.properties
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    operations-sorter: method
+    enabled: true
+    path: /swagger-ui.html
+

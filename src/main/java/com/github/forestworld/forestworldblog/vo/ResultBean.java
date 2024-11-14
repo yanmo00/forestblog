@@ -15,8 +15,7 @@ public class ResultBean<T> implements Serializable {
      * token过期
      */
     public static final int TOKEN_EXPIRE = -1;
-
-
+    
     /**
      * token无效，需要重新登录
      */

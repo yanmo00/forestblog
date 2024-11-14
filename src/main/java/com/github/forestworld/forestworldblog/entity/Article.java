@@ -15,16 +15,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 public class Article {
-
-    @TableId(type = IdType.AUTO)
-    private int id;
-
     private String title;
 
     private String content;
 
     private String author;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime publishTime;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime publishdate;
 }
