@@ -1,5 +1,6 @@
 package com.github.forestworld.forestworldblog.config;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import com.github.forestworld.forestworldblog.exception.BusinessException;
 import com.github.forestworld.forestworldblog.vo.ResultBean;
 import jakarta.servlet.http.HttpServletRequest;
@@ -79,6 +80,15 @@ public class GlobalExceptionHandler {
     {
         String requestURI = request.getRequestURI();
         log.error("请求地址'{}',发生未知异常.", requestURI, e);
+        return ResultBean.error(e.getMessage());
+    }
+
+
+    @ExceptionHandler(NotLoginException.class)
+    public ResultBean<?> handleNotLoginException(NotLoginException e, HttpServletRequest request)
+    {
+        String requestURI = request.getRequestURI();
+        log.error("请求地址'{}',未登录.", requestURI, e);
         return ResultBean.error(e.getMessage());
     }
 
