@@ -15,16 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-@Entity
-
-public class Article {
-    @Id
-    @TableId(type = IdType.AUTO)
-    private Long id;
-
+public class Article extends BaseEntity {
     private String title;
 
     private String content;
@@ -32,7 +24,6 @@ public class Article {
     private String author;
 
     @TableField(fill = FieldFill.INSERT)
-    private String publishdate;
-
+    private LocalDateTime publishdate;
 
 }

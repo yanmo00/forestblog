@@ -14,6 +14,7 @@ public class SQLMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         boolean hasGmtCreate = metaObject.hasSetter("createdAt");
+        boolean hasGmtPublish = metaObject.hasSetter("publishdate");
         boolean hasGmtModified = metaObject.hasSetter("updatedAt");
         if (hasGmtCreate) {
             Object gmtCreate = this.getFieldValByName("createdAt", metaObject);
@@ -25,6 +26,12 @@ public class SQLMetaObjectHandler implements MetaObjectHandler {
             Object gmtModified = this.getFieldValByName("updatedAt", metaObject);
             if (gmtModified == null) {
                 this.strictInsertFill(metaObject, "updatedAt", LocalDateTime.class, LocalDateTime.now());
+            }
+        }
+        if (hasGmtPublish) {
+            Object gmtPublish = this.getFieldValByName("publishdate", metaObject);
+            if (gmtPublish == null) {
+                this.strictInsertFill(metaObject, "publishdate", LocalDateTime.class, LocalDateTime.now());
             }
         }
     }
