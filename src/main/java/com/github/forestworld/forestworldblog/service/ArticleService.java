@@ -11,7 +11,7 @@ public interface ArticleService {
     // Service接口写出整体方法，Impl具体实施通过继承重写
     List<Article> searchByContent(String content);
 
-    List<Article> searchByTime(Timestamp time);
+    List<Article> searchByTimeRange(Timestamp startTime, Timestamp endTime);
 
     List<Article> searchAllArticles();
 

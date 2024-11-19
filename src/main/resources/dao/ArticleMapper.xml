@@ -7,4 +7,8 @@
         <select id="searchAllArticles" resultType="com.github.forestworld.forestworldblog.entity.Article">
             SELECT * FROM "article"
         </select>
+
+        <select id="searchByTimeRange" resultType="com.github.forestworld.forestworldblog.entity.Article">
+            SELECT * FROM "article" WHERE publishdate BETWEEN #{startTime} AND #{endTime}
+        </select>
     </mapper>

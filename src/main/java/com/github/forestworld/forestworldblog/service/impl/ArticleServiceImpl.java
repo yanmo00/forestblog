@@ -26,8 +26,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> searchByTime(Timestamp time) {
-        return List.of();
+    public List<Article> searchByTimeRange(Timestamp startTime, Timestamp endTime) {
+        return articleMapper.searchByTimeRange(startTime, endTime);
     }
 
     @Override
