@@ -9,9 +9,13 @@ import java.util.List;
 
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
+    int insertArticle(Article article);
+
     List<Article> searchByContent(String content);
 
     List<Article> searchAllArticles();
 
     List<Article> searchByTimeRange(Timestamp startTime, Timestamp endTime);
+
+    int updateArticle(Article article);
 }

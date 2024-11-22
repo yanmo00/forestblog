@@ -33,6 +33,8 @@ springdoc:
 
 mybatis-plus:
   mapper-locations: classpath*:/dao/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 
 sa-token:

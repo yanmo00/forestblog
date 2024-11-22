@@ -14,9 +14,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
 @Data
 public class Article extends BaseEntity {
+    @Id
+    private int id;
+
     private String title;
 
     private String content;

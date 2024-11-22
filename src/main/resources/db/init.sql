@@ -21,7 +21,7 @@ COMMENT ON COLUMN "users".password IS '密码';
 COMMENT ON COLUMN "users".email IS '邮箱';
 COMMENT ON COLUMN "users".avatar IS '头像';
 
-create table "articles"
+create table "article"
 (
     id          bigserial
             primary key,
@@ -31,11 +31,11 @@ create table "articles"
     publishdate timestamp     not null
 );
 
-alter table "articles"
+alter table "article"
     owner to beiyouge;
-COMMENT ON TABLE "articles" IS '文章表';
-COMMENT ON COLUMN "articles".title IS '标题';
-COMMENT ON COLUMN "articles".content IS '内容';
-COMMENT ON COLUMN "articles".author IS '作者';
-COMMENT ON COLUMN "articles".publishdate IS '发布日期';
+COMMENT ON TABLE "article" IS '文章表';
+COMMENT ON COLUMN "article".title IS '标题';
+COMMENT ON COLUMN "article".content IS '内容';
+COMMENT ON COLUMN "article".author IS '作者';
+COMMENT ON COLUMN "article".publishdate IS '发布日期';
 

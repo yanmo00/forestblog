@@ -19,6 +19,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleMapper articleMapper;
 
+    @Override
+    public Article searchByArticleId(Integer id) {
+        return articleMapper.selectById(id);
+    }
+
     // 数据库查找内容匹配文章
     @Override
     public List<Article> searchByContent(String content) {
@@ -37,20 +42,25 @@ public class ArticleServiceImpl implements ArticleService {
 
     // 将文章添加入数据库
     @Override
-    public ResultBean<Article> publicArticle(Article article) {
-        articleMapper.insert(article);
+    public ResultBean<String> publicArticle(Article article) {
+        articleMapper.insertArticle(article);
         return ResultBean.success();
     }
 
 
     @Override
     public ResultBean<Article> updateArticle(Article article) {
-        return null;
+        int rowsAffected = articleMapper.updateArticle(article);
+        if (rowsAffected > 0) {
+            return ResultBean.success("更新成功");
+        } else {
+            return ResultBean.error("更新失败");
+        }
     }
 
     @Override
-    public ResultBean<Article> deleteArticle(String articleId) {
-        return null;
+    public int deleteArticle(Integer articleId) {
+        return articleMapper.deleteById(articleId);
     }
 
 
