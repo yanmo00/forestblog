@@ -2,7 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
     <mapper namespace="com.github.forestworld.forestworldblog.dao.ArticleMapper">
        <insert id="insertArticle" parameterType="com.github.forestworld.forestworldblog.entity.Article">
-           INSERT INTO "article"(title, content, author, publishdate, created_at, updated_at) VALUES (#{title}, #{content}, #{author}, #{publishdate}, #{createdAt}, #{updatedAt})
+           INSERT INTO "article"
+               (title, content, author, publishdate, created_at, updated_at)
+           VALUES
+               (#{title}, #{content}, #{author}, #{publishdate}, #{createdAt}, #{updatedAt})
        </insert>
 
         <select id="selectById" parameterType="com.github.forestworld.forestworldblog.entity.Article">
@@ -24,12 +27,17 @@
             DELETE FROM article WHERE id = #{id}
         </delete>
 
-        <update id="updateArticle">
+        <update id="updateArticle" parameterType="com.github.forestworld.forestworldblog.entity.Article">
             UPDATE article
-            SET title = #{title},
-                content = #{content},
-                author = #{author}
+            SET
+                title = COALESCE(#{title}, title),
+                content = COALESCE(#{content}, content),
+                author = COALESCE(#{author}, author),
+                publishdate = COALESCE(#{publishdate}, publishdate),
+                created_at = COALESCE(#{createdAt}, created_at),
+                updated_at = COALESCE(#{updatedAt}, updated_at)
             WHERE id = #{id}
         </update>
+
 
 </mapper>

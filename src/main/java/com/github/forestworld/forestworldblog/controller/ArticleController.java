@@ -35,20 +35,7 @@ public class ArticleController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "content", required = false) String content) throws IOException {
-        File newfile = FileUtils.switchFormat(file);
-        Article article = new Article();
-        article.setAuthor("mo");
-        // 根据上传方式设置文章标题和内容
-        if (FileUtil.exist(newfile)) {
-            // 文件上传方式
-            article.setTitle(FileUtils.getOriginalFilename(newfile));
-            article.setContent(FileUtils.getContent(newfile));
-        } else {
-            // 手写文字方式
-            article.setTitle(title);
-            article.setContent(content);
-        }
-        articleService.publicArticle(article);
+        articleService.publicArticle(file, title, content);
         return ResultBean.success();
     }
 
@@ -67,27 +54,10 @@ public class ArticleController {
             return ResultBean.success();
         }
 
-
     @PutMapping("/update")
-    public ResultBean<Article> updateArticle(@RequestParam(required = false) int id,
-                                             @RequestParam(required = false) String content,
-                                             @RequestParam(required = false) String title,
-                                             @RequestParam(required = false) String author) {
-
-        Article article = articleService.searchByArticleId(id);
-        if (article == null){
-            return ResultBean.error("Article not found");
-        }
-        if (content != null) {
-            article.setContent(content);
-        }
-        if (title != null) {
-            article.setTitle(title);
-        }
-        if (author != null) {
-            article.setAuthor(author);
-        }
-        return articleService.updateArticle(article);
+    public ResultBean<String> updateArticle(@RequestBody Article article) {
+        articleService.updateArticle(article);
+        return ResultBean.success();
     }
 
     /**

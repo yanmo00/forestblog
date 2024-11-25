@@ -1,14 +1,19 @@
 package com.github.forestworld.forestworldblog.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import com.github.forestworld.forestworldblog.dao.ArticleMapper;
 import com.github.forestworld.forestworldblog.entity.Article;
 //import com.github.forestworld.forestworldblog.repository.ArticleRepository;
 import com.github.forestworld.forestworldblog.service.ArticleService;
+import com.github.forestworld.forestworldblog.utils.FileUtils;
 import com.github.forestworld.forestworldblog.vo.ResultBean;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -42,11 +47,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     // 将文章添加入数据库
     @Override
-    public ResultBean<String> publicArticle(Article article) {
+    public ResultBean<String> publicArticle(MultipartFile file, String title, String content) throws IOException {
+        File newfile = FileUtils.switchFormat(file);
+        Article article = new Article();
+        article.setAuthor("mo");
+        // 根据上传方式设置文章标题和内容
+        if (FileUtil.exist(newfile)) {
+            // 文件上传方式
+            article.setTitle(FileUtils.getOriginalFilename(newfile));
+            article.setContent(FileUtils.getContent(newfile));
+        } else {
+            // 手写文字方式
+            article.setTitle(title);
+            article.setContent(content);
+        }
         articleMapper.insertArticle(article);
         return ResultBean.success();
     }
-
 
     @Override
     public ResultBean<Article> updateArticle(Article article) {
