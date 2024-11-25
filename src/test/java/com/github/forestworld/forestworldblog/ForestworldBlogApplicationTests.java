@@ -1,5 +1,6 @@
 package com.github.forestworld.forestworldblog;
 
+import com.github.forestworld.forestworldblog.controller.UserController;
 import com.github.forestworld.forestworldblog.dao.ArticleMapper;
 import com.github.forestworld.forestworldblog.dao.UserMapper;
 import com.github.forestworld.forestworldblog.entity.Article;
@@ -23,12 +24,13 @@ class ForestworldBlogApplicationTests {
 
     @Test
     public void testSelect() {
-        Article article = new Article();
+        userMapper.selectByUsername("forestworld");
+    }
 
-        article.setTitle("1");
-        article.setContent("1");
-        article.setAuthor("mo");
-        articleMapper.insertArticle(article);
+    @Test
+    public void testLogin(){
+        UserController userController = new UserController();
+        userController.login("forestworld", "123456");
     }
 
 }

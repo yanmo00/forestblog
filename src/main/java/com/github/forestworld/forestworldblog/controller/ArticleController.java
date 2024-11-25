@@ -1,22 +1,19 @@
 package com.github.forestworld.forestworldblog.controller;
 
-import com.github.forestworld.forestworldblog.dao.ArticleMapper;
+import cn.hutool.core.io.FileUtil;
 import com.github.forestworld.forestworldblog.entity.Article;
 import com.github.forestworld.forestworldblog.service.ArticleService;
+import com.github.forestworld.forestworldblog.utils.FileUtils;
 import com.github.forestworld.forestworldblog.vo.ResultBean;
 import jakarta.annotation.Resource;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Update;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 
 @RestController
@@ -25,8 +22,7 @@ public class ArticleController {
 
     @Resource
     private ArticleService articleService;
-    @Autowired
-    private ArticleMapper articleMapper;
+
 
     /**
      * 发表文章（支持文件上传和手写文字两种方式）
@@ -38,30 +34,21 @@ public class ArticleController {
     public ResultBean<String> publishArticle(
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "content", required = false) String content) {
-
+            @RequestParam(value = "content", required = false) String content) throws IOException {
+        File newfile = FileUtils.switchFormat(file);
         Article article = new Article();
-        // 防空性检查
-        if ((file == null || file.isEmpty()) && (content == null || content.trim().isEmpty())) {
-            return ResultBean.error("文件和内容均为空");
+        article.setAuthor("mo");
+        // 根据上传方式设置文章标题和内容
+        if (FileUtil.exist(newfile)) {
+            // 文件上传方式
+            article.setTitle(FileUtils.getOriginalFilename(newfile));
+            article.setContent(FileUtils.getContent(newfile));
+        } else {
+            // 手写文字方式
+            article.setTitle(title);
+            article.setContent(content);
         }
-
-        try {
-            article.setAuthor("mo");
-            // 根据上传方式设置文章标题和内容
-            if (file != null && !file.isEmpty()) {
-                // 文件上传方式
-                article.setTitle(removeExtension(file.getOriginalFilename()));
-                article.setContent(getContent(file));
-            } else {
-                // 手写文字方式
-                article.setTitle(title);
-                article.setContent(content);
-            }
-            articleService.publicArticle(article);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        articleService.publicArticle(article);
         return ResultBean.success();
     }
 
@@ -72,19 +59,13 @@ public class ArticleController {
      */
     @DeleteMapping("/delete")
     public ResultBean<String> deleteArticle(@RequestParam Integer articleId) {
-        try {
             // 检查 articleId 是否为空
             if (articleId == null) {
                 return ResultBean.error("articleId cannot be empty");
             }
-             articleService.deleteArticle(articleId);
+            articleService.deleteArticle(articleId);
             return ResultBean.success();
-        } catch (Exception e) {
-            // 记录异常日志
-            e.printStackTrace();
-            return ResultBean.error("Failed to delete article: " + e.getMessage());
         }
-    }
 
 
     @PutMapping("/update")
@@ -115,11 +96,9 @@ public class ArticleController {
      * @return 发布结果
      */
     @GetMapping("/selectById/{id}")
-    public ResultBean<Map<String, Object>> selectById(@PathVariable("id") Integer id) {
-        Article articles = articleService.searchByArticleId(id);
-        Map<String, Object> results = new HashMap<>();
-        results.put("articles", articles);
-        return ResultBean.success("查询成功",results);
+    public ResultBean<Article> selectById(@PathVariable("id") Integer id) {
+        Article article = articleService.searchByArticleId(id);
+        return ResultBean.success("查询成功",article);
     }
 
     /**
@@ -128,12 +107,9 @@ public class ArticleController {
      * @return 发布结果
      */
     @GetMapping("/selectByContent")
-    public ResultBean<Map<String, Object>> selectByContent(@RequestParam String content){
+    public ResultBean<List<Article>> selectByContent(@RequestParam String content){
         List<Article> articles = articleService.searchByContent(content);
-        Map<String, Object> results = new HashMap<>();
-        results.put("count", articles.size());
-        results.put("articles", articles);
-        return ResultBean.success("查询成功",results);
+        return ResultBean.success("查询成功",articles);
     }
 
     /**
@@ -143,23 +119,11 @@ public class ArticleController {
      * @return 发布结果
      */
     @GetMapping("/selectByTime")
-    public ResultBean<Map<String, Object>> selectByTime(@RequestParam String startTime, @RequestParam String endTime){
-        try{
-            Timestamp start = Timestamp.valueOf(startTime);
-            Timestamp end = Timestamp.valueOf(endTime);
-            List<Article> articles = articleService.searchByTimeRange(start, end);
-            Map<String, Object> results = new HashMap<>();
-            results.put("count", articles.size());
-            results.put("articles", articles);
-            // 返回成功响应
-            return ResultBean.success("查询成功", results);
-    } catch (IllegalArgumentException e) {
-        // 处理非法参数异常
-        return ResultBean.error("时间格式错误，请检查输入的时间格式是否正确");
-    } catch (Exception e) {
-        // 处理其他未知异常
-        return ResultBean.error("服务器内部错误");
-    }
+    public ResultBean<List<Article>> selectByTime(@RequestParam String startTime, @RequestParam String endTime){
+        Timestamp start = Timestamp.valueOf(startTime);
+        Timestamp end = Timestamp.valueOf(endTime);
+        List<Article> articles = articleService.searchByTimeRange(start, end);
+        return ResultBean.success("查询成功", articles);
 }
 
     /**
@@ -167,28 +131,9 @@ public class ArticleController {
      * @return 发布结果
      */
     @GetMapping("/selectAll")
-    public ResultBean<Map<String, Object>> selectAllArticles(){
+    public ResultBean<List<Article>> selectAllArticles() {
         List<Article> articles = articleService.searchAllArticles();
-        Map<String, Object> results = new HashMap<>();
-        results.put("count", articles.size());
-        results.put("articles", articles);
-        return ResultBean.success("查询成功",results);
-    }
-
-    //获取txt文件和md文件内容
-    public String getContent(MultipartFile file) throws IOException {
-        String content = new String(file.getBytes(), StandardCharsets.UTF_8);
-        // 移除字符串中的空字符
-        content = content.replace("\0", "");
-        return content;
-    }
-
-    //去除文件后缀
-    public String removeExtension(String fileName) {
-        if (fileName == null) {
-            return null;
-        }
-        return fileName.substring(0,fileName.lastIndexOf("."));
+        return ResultBean.success("查询成功", articles);
     }
 
 }
